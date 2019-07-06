@@ -132,4 +132,5 @@ tags
 # Persistent undo
 [._]*.un~
 
-
+### for firebase project
+google-application-credentials.json
