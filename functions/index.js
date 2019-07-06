@@ -1,6 +1,21 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const puppeteer = require('puppeteer');
 admin.initializeApp();
+
+// squidooo test
+exports.getSiteTitle = functions.https.onRequest(async (req, res) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('http://www.yoyaku.city.ota.tokyo.jp');
+  await page.waitForNavigation();
+
+  const siteTitle = await page.title();
+
+  await browser.close();
+
+  console.log(siteTitle);
+});
 
 // addMessage()
 exports.addMessage = functions.https.onRequest(async (req, res) => {
