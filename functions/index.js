@@ -27,13 +27,29 @@ exports.addProfile = functions.https.onRequest(async (req, res) => {
   const text = req.query.text;
 
   const db = admin.firestore();
-  const doc = db.collection('users').doc('family');
+  const doc = await db.collection('users').doc('family');
 
-  doc.set({
+  await doc.set({
     name: text
   });
 
-  res.redirect(200);
+  res.redirect(200, 'http://localhost:5001/ymd-cf-test/us-central1');
+});
+
+// getProfile()
+exports.getProfile = functions.https.onRequest(async (req, res) => {
+  console.log('Starting getProfile');
+  const db = admin.firestore();
+  await db.collection('users').doc('family').get()
+    .then((doc) => {
+      console.log(doc.id, '=>', JSON.stringify(doc.data()));
+      return true;
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+
+  res.redirect(200, 'http://localhost:5001/ymd-cf-test/us-central1');
 });
 
 // addMessage()
