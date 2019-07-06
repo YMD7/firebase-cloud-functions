@@ -1,7 +1,12 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const puppeteer = require('puppeteer');
-admin.initializeApp();
+
+const serviceAccount = require('/Users/kyo/Dev/firebase-cloud-functions/google-application-credentials.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://ymd-cf-test.firebaseio.com'
+});
 
 // squidooo test
 exports.getSiteTitle = functions.https.onRequest(async (req, res) => {
@@ -15,6 +20,20 @@ exports.getSiteTitle = functions.https.onRequest(async (req, res) => {
   await browser.close();
 
   console.log(siteTitle);
+});
+
+// addProfile()
+exports.addProfile = functions.https.onRequest(async (req, res) => {
+  const text = req.query.text;
+
+  const db = admin.firestore();
+  const doc = db.collection('users').doc('family');
+
+  doc.set({
+    name: text
+  });
+
+  res.redirect(200);
 });
 
 // addMessage()
