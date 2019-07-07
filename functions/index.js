@@ -30,7 +30,11 @@ exports.addProfile = functions.https.onRequest(async (req, res) => {
   const doc = await db.collection('users').doc('family');
 
   await doc.set({
-    name: text
+    mam: {
+      name: text,
+      role: 'mother',
+      age: 31
+    }
   });
 
   res.redirect(200, 'http://localhost:5001/ymd-cf-test/us-central1');
